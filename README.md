@@ -1,4 +1,4 @@
-# vue-mailform-test
+# contact-mail-form
 
 ## Project setup
 ```

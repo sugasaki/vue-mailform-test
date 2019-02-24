@@ -9,27 +9,37 @@ export default new Router({
   base: process.env.BASE_URL,
   routes: [
     {
-      path: "/",
+      path: "",
       name: "home",
       component: Home
     },
     {
-      path: "/about",
-      name: "about",
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
+      path: "/counter",
+      name: "counter",
       component: () =>
-        import(/* webpackChunkName: "about" */ "./views/About.vue")
+        import(/* webpackChunkName: "counter" */ "./views/Counter.vue")
     },
     {
       path: "/contact",
-      name: "contact",
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () =>
-        import(/* webpackChunkName: "about" */ "./views/Contact.vue")
+        import(/* webpackChunkName: "contact" */ "./views/contact/Contact.vue"),
+      children: [
+        {
+          path: "",
+          component: () =>
+            import(/* webpackChunkName: "contact" */ "./views/contact/ContactForm.vue")
+        },
+        {
+          path: "cofirm",
+          component: () =>
+            import(/* webpackChunkName: "cofirm" */ "./views/contact/Comfirm.vue")
+        },
+        {
+          path: "result",
+          component: () =>
+            import(/* webpackChunkName: "result" */ "./views/contact/Result.vue")
+        }
+      ]
     }
   ]
 });

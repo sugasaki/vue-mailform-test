@@ -28,15 +28,6 @@
       <el-input v-model="ruleForm.address"></el-input>
     </el-form-item>
 
-    <el-form-item label="どの製品について">
-      <el-checkbox-group v-model="ruleForm.type">
-        <el-checkbox label="Aサービスについて" name="type"></el-checkbox>
-        <el-checkbox label="Bサービスについて" name="type"></el-checkbox>
-        <el-checkbox label="Cサービスについて" name="type"></el-checkbox>
-        <el-checkbox label="その他" name="type"></el-checkbox>
-      </el-checkbox-group>
-    </el-form-item>
-
     <el-form-item label="どの製品について" prop="region">
       <el-select v-model="ruleForm.region" placeholder="どの製品について">
         <el-option label="Aサービスについて" value="regionA"></el-option>
@@ -50,44 +41,40 @@
       <el-input v-model="ruleForm.title"></el-input>
     </el-form-item>
     <el-form-item label="問い合わせ内容" prop="contactBody">
-      <el-input type="textarea" v-model="ruleForm.contactBody"></el-input>
+      <el-input type="textarea" v-model="ruleForm.contactBody" :rows="5" autosize></el-input>
     </el-form-item>
 
     <el-form-item label prop="agree">
-      <el-checkbox label="個人情報の保持の同意" name="agree" v-model="ruleForm.agree"></el-checkbox>
+      <el-checkbox label="個人情報の保持の同意" name="agree" v-model="ruleForm.agree" required></el-checkbox>
     </el-form-item>
 
     <el-form-item>
-      <el-button type="primary" @click="submitForm('ruleForm')">Create</el-button>
-      <el-button @click="resetForm('ruleForm')">Reset</el-button>
+      <el-button @click="submitForm('ruleForm')" type="primary">送信内容確認</el-button>
+      <el-button @click="cancelClick">Cancel</el-button>
     </el-form-item>
   </el-form>
 </template>
 
 <script>
-import { Form, FormItem } from "element-ui";
-import { Button, Select } from "element-ui";
-
 export default {
-  name: "HelloWorld",
+  name: "contact-form",
   data() {
-    return {
-      ruleForm: {
-        name: "",
-        kana: "",
-        company: "",
-        mailaddress: "",
-        postal: "",
-        address: "",
+    const storeValue = this.$store.getters["contact/values"];
+    const initState = {
+      name: "",
+      kana: "",
+      company: "",
+      mailaddress: "",
+      postal: "",
+      address: "",
+      region: "",
+      title: "",
+      contactBody: "",
+      agree: true
+    };
 
-        type: [],
-        resource: "",
-        desc: "",
-        title: "",
-        contactBody: "",
-        resource: "",
-        agree: true
-      },
+    return {
+      ruleForm: storeValue === null ? initState : storeValue,
       rules: {
         name: [
           {
@@ -158,8 +145,8 @@ export default {
         agree: [
           {
             required: true,
-            message: "個人情報の保持の同意",
-            trigger: "blur"
+            message: "個人情報の保持の同意をお願いします",
+            trigger: "change"
           }
         ]
       }
@@ -167,24 +154,40 @@ export default {
   },
   components: {},
   props: {},
+
+  created: function() {
+    this.$store.commit("contact/stepActive", 0);
+  },
+
   methods: {
+    cancelClick() {
+      this.$router.push("/");
+    },
     submitForm(formName) {
+      if (this.ruleForm.agree == false) {
+        this.$message({
+          showClose: true,
+          message: "個人情報の保持の同意をお願いします",
+          type: "error"
+        });
+        return false;
+      }
+
       this.$refs[formName].validate(valid => {
         if (valid) {
-          alert("submit!");
+          //console.log("ruleForm", this.ruleForm);
+          this.$store.commit("contact/setValues", this.ruleForm);
+          this.$router.push("contact/cofirm");
         } else {
-          console.log("error submit!!");
+          this.$message({
+            showClose: true,
+            message: "必須項目を入力してください",
+            type: "error"
+          });
           return false;
         }
       });
-    },
-    resetForm(formName) {
-      this.$refs[formName].resetFields();
     }
   }
 };
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-</style>
