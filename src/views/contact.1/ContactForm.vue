@@ -1,9 +1,9 @@
 <template>
   <el-form
-    xs
     :model="ruleForm"
     :rules="rules"
     ref="ruleForm"
+    label-width="200px"
     class="demo-ruleForm"
     status-icon
     validate-on-rule-change
@@ -30,7 +30,10 @@
 
     <el-form-item label="どの製品について" prop="productKey">
       <el-select v-model="ruleForm.productKey" placeholder="どの製品について">
-        <el-option v-for="item in products" :key="item.key" :label="item.value" :value="item.key"></el-option>
+        <el-option label="Aサービスについて" value="regionA"></el-option>
+        <el-option label="Bサービスについて" value="regionB"></el-option>
+        <el-option label="Cサービスについて" value="regionC"></el-option>
+        <el-option label="その他" value="regionOther"></el-option>
       </el-select>
     </el-form-item>
 
@@ -38,7 +41,7 @@
       <el-input v-model="ruleForm.title"></el-input>
     </el-form-item>
     <el-form-item label="問い合わせ内容" prop="contactBody">
-      <el-input type="textarea" v-model="ruleForm.contactBody" :rows="5"></el-input>
+      <el-input type="textarea" v-model="ruleForm.contactBody" :rows="5" autosize></el-input>
     </el-form-item>
 
     <el-form-item label prop="agree">
@@ -53,18 +56,10 @@
 </template>
 
 <script>
-import store from "../../store";
-
 export default {
   name: "contact-form",
-  beforeRouteEnter(to, from, next) {
-    const storeValue = store.getters["contact/values"];
-    console.log("beforeRouteEnter:storeValue", storeValue);
-    next();
-  },
-
   data() {
-    const storeValue = this.$store.state.contact.values; //this.$store.getters["contact/values"];
+    const storeValue = this.$store.getters["contact/values"];
     const initState = {
       name: "",
       kana: "",
@@ -72,14 +67,13 @@ export default {
       mailaddress: "",
       postal: "",
       address: "",
-      productKey: "",
+      region: "",
       title: "",
       contactBody: "",
-      agree: false
+      agree: true
     };
 
     return {
-      products: this.$store.getters["contact/products"],
       ruleForm: storeValue === null ? initState : storeValue,
       rules: {
         name: [
@@ -167,7 +161,6 @@ export default {
 
   methods: {
     cancelClick() {
-      this.$store.dispatch("contact/clearContactValues", this.ruleForm);
       this.$router.push("/");
     },
     submitForm(formName) {
@@ -183,7 +176,7 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           //console.log("ruleForm", this.ruleForm);
-          this.$store.dispatch("contact/setContactValues", this.ruleForm);
+          this.$store.commit("contact/setValues", this.ruleForm);
           this.$router.push("contact/cofirm");
         } else {
           this.$message({

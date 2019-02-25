@@ -1,52 +1,83 @@
 <template>
   <div v-loading="isBusy">
-    <h1>Confirm</h1>
+    <h1>お問い合わせの確認</h1>
 
-    <el-row :gutter="20">
-      <el-col :span="6">
-        <div class="grid-content bg-purple">名前</div>
-      </el-col>
-      <el-col :span="6">
-        <div class="grid-content bg-purple-light">{{values.name}}</div>
-      </el-col>
-    </el-row>
+    <v-list>
+      <v-subheader>入力に間違いがないか、ご確認ください</v-subheader>
 
-    <div>
-      <p>名前</p>
-      <p>{{values.name}}</p>ふりがな
-      <p></p>
-      <p>{{values.kana}}</p>
+      <v-list-tile avatar>
+        <v-list-tile-content>
+          <v-list-tile-title>名前</v-list-tile-title>
+          <v-list-tile-sub-title>{{values.name}}</v-list-tile-sub-title>
+        </v-list-tile-content>
+      </v-list-tile>
 
-      <p>社名</p>
-      <p>{{values.company}}</p>
+      <v-list-tile avatar>
+        <v-list-tile-content>
+          <v-list-tile-title>ふりがな</v-list-tile-title>
+          <v-list-tile-sub-title>{{values.kana}}</v-list-tile-sub-title>
+        </v-list-tile-content>
+      </v-list-tile>
 
-      <p>メールアドレス</p>
-      <p>{{values.email}}</p>
+      <v-list-tile avatar>
+        <v-list-tile-content>
+          <v-list-tile-title>社名</v-list-tile-title>
+          <v-list-tile-sub-title>{{values.company}}</v-list-tile-sub-title>
+        </v-list-tile-content>
+      </v-list-tile>
 
-      <p>郵便番号</p>
-      <p>{{values.postal}}</p>
+      <v-list-tile avatar>
+        <v-list-tile-content>
+          <v-list-tile-title>メールアドレス</v-list-tile-title>
+          <v-list-tile-sub-title>{{values.mailaddress}}</v-list-tile-sub-title>
+        </v-list-tile-content>
+      </v-list-tile>
 
-      <p>住所</p>
-      <p>{{values.address}}</p>
+      <v-list-tile avatar>
+        <v-list-tile-content>
+          <v-list-tile-title>郵便番号</v-list-tile-title>
+          <v-list-tile-sub-title>{{values.postal}}</v-list-tile-sub-title>
+        </v-list-tile-content>
+      </v-list-tile>
 
-      <p>どの製品について</p>
-      <p>{{values.region}}</p>
+      <v-list-tile avatar>
+        <v-list-tile-content>
+          <v-list-tile-title>住所</v-list-tile-title>
+          <v-list-tile-sub-title>{{values.address}}</v-list-tile-sub-title>
+        </v-list-tile-content>
+      </v-list-tile>
 
-      <p>問い合わせ件名</p>
-      <p>{{values.title}}</p>
+      <v-list-tile avatar>
+        <v-list-tile-content>
+          <v-list-tile-title>どの製品について</v-list-tile-title>
+          <v-list-tile-sub-title>{{product}}</v-list-tile-sub-title>
+        </v-list-tile-content>
+      </v-list-tile>
 
-      <p>問い合わせ内容</p>
-      <p>{{values.contactBody}}</p>
+      <v-list-tile avatar>
+        <v-list-tile-content>
+          <v-list-tile-title>問い合わせ件名</v-list-tile-title>
+          <v-list-tile-sub-title>{{values.title}}</v-list-tile-sub-title>
+        </v-list-tile-content>
+      </v-list-tile>
 
-      <p>個人情報の保持の同意</p>
-      <p>{{values.agree}}</p>
-    </div>
+      <v-list-tile avatar>
+        <v-list-tile-content>
+          <v-list-tile-title>問い合わせ内容</v-list-tile-title>
+          <v-list-tile-sub-title>{{values.contactBody}}</v-list-tile-sub-title>
+        </v-list-tile-content>
+      </v-list-tile>
 
-    <el-button @click="handleClickSubmit" type="primary">送信する</el-button>
+      <v-list-tile avatar>
+        <v-list-tile-content>
+          <v-list-tile-title>個人情報の保持の同意</v-list-tile-title>
+          <v-list-tile-sub-title>{{values.agree}}</v-list-tile-sub-title>
+        </v-list-tile-content>
+      </v-list-tile>
+    </v-list>
 
-    <router-link to="/contact">戻る</router-link>
-
-    <div></div>
+    <v-btn color="info" @click="handleClickSubmit">送信する</v-btn>
+    <v-btn to="/contact">戻る</v-btn>
   </div>
 </template>
 
@@ -73,6 +104,9 @@ export default {
     };
   },
   computed: {
+    product() {
+      return this.$store.getters["contact/product"];
+    },
     values() {
       console.log("getters", this.$store.getters);
       console.log("values", this.$store.getters["contact/values"]);
@@ -91,9 +125,9 @@ export default {
       // await this.$store.dispatch("contact/postContactValues");
       this.isBusy = true;
 
-      console.log("values", this.values);
+      //console.log("values", this.values);
       let result = await api.fetchPosts(this.values);
-      console.log("result", result);
+      //console.log("result", result);
       this.isBusy = false;
 
       if (result.err) {
