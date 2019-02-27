@@ -53,15 +53,8 @@
 </template>
 
 <script>
-import store from "../../store";
-
 export default {
   name: "contact-form",
-  beforeRouteEnter(to, from, next) {
-    const storeValue = store.getters["contact/values"];
-    //console.log("beforeRouteEnter:storeValue", storeValue);
-    next();
-  },
 
   data() {
     const storeValue = this.$store.state.contact.values; //this.$store.getters["contact/values"];
@@ -83,11 +76,6 @@ export default {
       //console.log("kana", kana);
       if (kana === null) {
         callback(new Error("ふりがなを入力してください"));
-      } else {
-        if (this.ruleForm.checkPass !== "") {
-          //this.$refs.ruleForm2.validateField("checkPass");
-        }
-        callback();
       }
     };
 
