@@ -59,7 +59,7 @@ export default {
   name: "contact-form",
   beforeRouteEnter(to, from, next) {
     const storeValue = store.getters["contact/values"];
-    console.log("beforeRouteEnter:storeValue", storeValue);
+    //console.log("beforeRouteEnter:storeValue", storeValue);
     next();
   },
 
@@ -180,9 +180,20 @@ export default {
         return false;
       }
 
+      this.ruleForm.name = this.$sanitize(this.ruleForm.name);
+      this.ruleForm.kana = this.$sanitize(this.ruleForm.kana);
+      this.ruleForm.company = this.$sanitize(this.ruleForm.company);
+      this.ruleForm.mailaddress = this.$sanitize(this.ruleForm.mailaddress);
+      this.ruleForm.postal = this.$sanitize(this.ruleForm.postal);
+      this.ruleForm.address = this.$sanitize(this.ruleForm.address);
+      this.ruleForm.title = this.$sanitize(this.ruleForm.title);
+      this.ruleForm.contactBody = this.$sanitize(this.ruleForm.contactBody);
+      //console.log("this.ruleForm", this.ruleForm);
+
       this.$refs[formName].validate(valid => {
         if (valid) {
           //console.log("ruleForm", this.ruleForm);
+
           this.$store.dispatch("contact/setContactValues", this.ruleForm);
           this.$router.push("contact/cofirm");
         } else {
