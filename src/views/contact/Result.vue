@@ -2,7 +2,15 @@
   <div>
     <h1>送信が完了しました</h1>
 
-    <value-list ></value-list>
+    <el-row>
+      <el-col :span="12">
+        <value-list></value-list>
+      </el-col>
+      <el-col :span="6" :offset="3">
+        <h2>送信したJSON</h2>
+        <tree-view :data="values" :options="{maxDepth: 3}"></tree-view>
+      </el-col>
+    </el-row>
 
     <v-btn @click="homeBackClick">ホームへ</v-btn>
 
@@ -28,6 +36,11 @@ export default {
       next("/contact");
     }
     next();
+  },
+  computed: {
+    values() {
+      return this.$store.getters["contact/values"];
+    }
   },
   methods: {
     homeBackClick() {

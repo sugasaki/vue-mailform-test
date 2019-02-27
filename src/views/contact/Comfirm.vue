@@ -2,9 +2,17 @@
   <div v-loading="isBusy">
     <h1>お問い合わせの確認</h1>
 
-      <v-subheader>入力に間違いがないか、ご確認ください</v-subheader>
+    <v-subheader>入力に間違いがないか、ご確認ください</v-subheader>
 
-      <value-list ></value-list>
+    <el-row>
+      <el-col :span="12">
+        <value-list></value-list>
+      </el-col>
+      <el-col :span="6" :offset="3">
+        <h2>送信するJSON</h2>
+        <tree-view :data="values" :options="{maxDepth: 3}"></tree-view>
+      </el-col>
+    </el-row>
 
     <v-btn color="info" @click="handleClickSubmit">送信する</v-btn>
     <v-btn to="/contact">戻る</v-btn>
@@ -42,8 +50,8 @@ export default {
       return this.$store.getters["contact/product"];
     },
     values() {
-      console.log("getters", this.$store.getters);
-      console.log("values", this.$store.getters["contact/values"]);
+      //console.log("getters", this.$store.getters);
+      //console.log("values", this.$store.getters["contact/values"]);
       return this.$store.getters["contact/values"];
     }
     // isBusy() {
@@ -53,10 +61,6 @@ export default {
 
   methods: {
     async handleClickSubmit() {
-      //constform = newContactForm(this.values);
-      //onstrequestBody = form.buildRequestBody();
-      //console.log(requestBody);
-      // await this.$store.dispatch("contact/postContactValues");
       this.isBusy = true;
 
       //console.log("values", this.values);

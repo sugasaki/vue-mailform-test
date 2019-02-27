@@ -57,7 +57,7 @@ const contactFormModule = {
   state: { values: null, stepActive: 0, isBusy: false },
   getters: {
     values: state => {
-      console.log("state.values", state.values);
+      //console.log("state.values", state.values);
       if (state.values === null) return {};
       return state.values;
     },
@@ -75,7 +75,7 @@ const contactFormModule = {
       const result = productLists.find(item => item["key"] === key);
       if (!result) return "";
 
-      console.log("result", result);
+      //console.log("result", result);
       return result["value"];
     }
   },
@@ -97,36 +97,12 @@ const contactFormModule = {
   actions: {
     //
     setContactValues(context, data) {
-      console.log("actions/setContactValues", data);
+      //console.log("actions/setContactValues", data);
       context.commit("setValues", data);
     },
     clearContactValues(context) {
-      console.log("actions/clearContactValues");
+      //console.log("actions/clearContactValues");
       context.commit("clearValues");
-    },
-
-    async postContactValues(context) {
-      console.log("actions/postContactValues : start");
-      context.commit("setIsBusy", true);
-
-      const payload = {
-        message: ""
-      };
-
-      setTimeout(() => {
-        context.commit("setIsBusy", false);
-        console.log("actions/postContactValues : setTimeout");
-      }, 2000);
-
-      /*
-      await axios.post("http://localhost:3000").then(res => {
-        payload.message = res.data;
-      });
-
-      await axios.post("/user", state.values);
-      */
-
-      // context.commit("getMessage", payload);
     }
   }
 };

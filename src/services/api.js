@@ -27,7 +27,7 @@ function callGetApi(endpoint) {
 
 // Fetches an API response
 function callPostApi(endpoint, data) {
-  console.log("api - callPostApi - data", data);
+  console.log("callPostApi axios data:", data);
 
   const fullUrl =
     endpoint.indexOf(API_ROOT) === -1 ? API_ROOT + endpoint : endpoint;
@@ -44,7 +44,7 @@ function callPostApi(endpoint, data) {
     .post(fullUrl, data)
     .then(response => {
       const result = response;
-      console.log("axios response", response);
+      console.log("axios response=", response);
       return { result }; //返して代入する変数名と合わせる
     })
     .catch(err => {
