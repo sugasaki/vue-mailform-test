@@ -78,6 +78,19 @@ export default {
       agree: false
     };
 
+    var checkKana = (rule, value, callback) => {
+      let kana = value.match(/^[ぁ-ん　 ]+$/);
+      //console.log("kana", kana);
+      if (kana === null) {
+        callback(new Error("ふりがなを入力してください"));
+      } else {
+        if (this.ruleForm.checkPass !== "") {
+          //this.$refs.ruleForm2.validateField("checkPass");
+        }
+        callback();
+      }
+    };
+
     return {
       products: this.$store.getters["contact/products"],
       ruleForm: storeValue === null ? initState : storeValue,
@@ -106,7 +119,8 @@ export default {
             max: 100,
             message: "ふりがなは２文字以上、100文字以下で入力してください",
             trigger: "blur"
-          }
+          },
+          { validator: checkKana, trigger: "blur" }
         ],
 
         mailaddress: [
