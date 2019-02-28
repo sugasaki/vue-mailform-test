@@ -28,6 +28,11 @@
       <el-input v-model="ruleForm.address"></el-input>
     </el-form-item>
 
+    <el-form-item label="電話番号" prop="telNo">
+      <el-input v-model="ruleForm.telNo"></el-input>
+    </el-form-item>
+
+
     <el-form-item label="どの製品について" prop="productKey">
       <el-select v-model="ruleForm.productKey" placeholder="どの製品について">
         <el-option v-for="item in products" :key="item.key" :label="item.value" :value="item.key"></el-option>
@@ -65,6 +70,7 @@ export default {
       mailaddress: "",
       postal: "",
       address: "",
+      telNo:"",
       productKey: "",
       title: "",
       contactBody: "",
@@ -98,6 +104,21 @@ export default {
     };
 
 
+    //電話番号バリデーション
+    var checkTelNo = (rule, value, callback) => {
+      if (!value) {
+          return callback();;
+        }
+      let tel = value.match(/^\d{10}$|^\d{11}$/);
+      //console.log("kana", kana);
+      if (tel === null) {
+        callback(new Error("ハイフン入れずに10桁か11桁で入力してください"));
+      }else{
+        callback();
+      }
+    };
+
+//  
 
     return {
       products: this.$store.getters["contact/products"],
@@ -137,7 +158,14 @@ export default {
             trigger: "blur"
           },
           { validator: checkPostal, trigger: "blur" }
-
+        ],
+        telNo:[
+          {
+            required: false,
+            message: "postalを入力してください",
+            trigger: "blur"
+          },
+          { validator: checkTelNo, trigger: "blur" }
         ],
         mailaddress: [
           {

@@ -42,6 +42,15 @@
       </v-list-tile-content>
     </v-list-tile>
 
+
+    <v-list-tile avatar>
+      <v-list-tile-content>
+        <v-list-tile-title>電話番号</v-list-tile-title>
+        <v-list-tile-sub-title>{{values.telNo}}</v-list-tile-sub-title>
+      </v-list-tile-content>
+    </v-list-tile>
+
+
     <v-list-tile avatar>
       <v-list-tile-content>
         <v-list-tile-title>どの製品について</v-list-tile-title>
