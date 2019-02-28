@@ -75,7 +75,7 @@ export default {
       let kana = value.match(/^[ぁ-ん　 ]+$/);
       //console.log("kana", kana);
       if (kana === null) {
-        callback(new Error("ふりがなを入力してください"));
+        callback(new Error("ひらがなで入力してください"));
       }
     };
 
