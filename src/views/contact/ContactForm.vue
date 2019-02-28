@@ -21,7 +21,7 @@
     <el-form-item label="メールアドレス" prop="mailaddress">
       <el-input v-model="ruleForm.mailaddress"></el-input>
     </el-form-item>
-    <el-form-item label="郵便番号">
+    <el-form-item label="郵便番号" prop="postal">
       <el-input v-model="ruleForm.postal"></el-input>
     </el-form-item>
     <el-form-item label="住所">
@@ -71,13 +71,33 @@ export default {
       agree: false
     };
 
+    //ふりがなのバリデーション
     var checkKana = (rule, value, callback) => {
       let kana = value.match(/^[ぁ-ん　 ]+$/);
       //console.log("kana", kana);
       if (kana === null) {
         callback(new Error("ひらがなで入力してください"));
+      }else{
+        callback();
       }
     };
+
+
+    //郵便番号バリデーション
+    var checkPostal = (rule, value, callback) => {
+      if (!value) {
+          return callback();;
+        }
+      let post = value.match(/^\d{3}[-]\d{4}$/);
+      //console.log("kana", kana);
+      if (post === null) {
+        callback(new Error("ハイフンを入れて７桁で入力してください"));
+      }else{
+        callback();
+      }
+    };
+
+
 
     return {
       products: this.$store.getters["contact/products"],
@@ -110,7 +130,15 @@ export default {
           },
           { validator: checkKana, trigger: "blur" }
         ],
+        postal:[
+          {
+            required: false,
+            message: "postalを入力してください",
+            trigger: "blur"
+          },
+          { validator: checkPostal, trigger: "blur" }
 
+        ],
         mailaddress: [
           {
             required: true,
